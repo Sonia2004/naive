@@ -266,3 +266,4 @@ Creado como proyecto educativo de Machine Learning con Django.
 **¿Preguntas?** Revisa los templates HTML para entender la interfaz o modifica `spam_ml.py` para ajustar el modelo.
 
 ¡Disfruta detectando SPAM! 🚀
+# naive
