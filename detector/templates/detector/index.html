@@ -1,16 +1,40 @@
-{% extends 'detector/base.html' %}
-
-{% block title %}Detector{% endblock %}
-
-{% block content %}
-<div style="max-width:520px;margin:18px auto;padding:6px;">
-  <form method="post">
-    {% csrf_token %}
-    {{ form.subject }}
-    {{ form.body }}
-    <div style="text-align:right;margin-top:6px;">
-      <button type="submit" style="padding:6px 10px;font-size:0.9rem;">Analizar</button>
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detector</title>
+    <style>
+      html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif}
+      body{background:linear-gradient(135deg,#6f6ad8,#7a5fc2);color:#222}
+      .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+      .box{width:640px;max-width:92%;background:#fff;border-radius:8px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
+      .input, textarea{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:6px;padding:10px;font-size:1rem}
+      textarea{height:260px;resize:vertical}
+      .submit-row{display:flex;justify-content:flex-end;margin-top:10px}
+      .btn{background:#f8f8f8;border:1px solid #333;padding:8px 12px;border-radius:4px;cursor:pointer}
+      label{display:block;font-size:0.95rem;margin-bottom:6px;color:#333}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="box">
+        <form method="post">
+          {% csrf_token %}
+          <div style="margin-bottom:10px;">
+            <label for="id_subject">Asunto del email (opcional)</label>
+            {{ form.subject|safe }}
+          </div>
+          <div style="margin-bottom:8px;">
+            <label for="id_body">Pega el contenido del email aquí</label>
+            {{ form.body|safe }}
+          </div>
+          <div class="submit-row">
+            <button type="submit" class="btn">Analizar</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </form>
-</div>
-{% endblock %}
+  </body>
+</html>
