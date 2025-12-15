@@ -9,13 +9,13 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-8 mx-auto">
+    <div class="col-lg-5 col-md-7 col-sm-10 mx-auto">
         <!-- Formulario -->
         <div class="card card-custom">
             <div class="card-header bg-light border-0">
                 <h4 class="mb-0">Analizar Email</h4>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-3">
                 <form method="post" class="needs-validation">
                     {% csrf_token %}
                     
@@ -61,56 +61,15 @@
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn btn-custom btn-custom-primary w-100 mt-3">
-                        <i class="fas fa-search"></i> Analizar Email
-                    </button>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-custom btn-custom-primary btn-sm mt-3">
+                            <i class="fas fa-search"></i> Analizar
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
-
-        <!-- Historial reciente -->
-        {% if recent_checks %}
-        <div class="card card-custom">
-            <div class="card-header bg-light border-0">
-                <h4 class="mb-0">Últimos Análisis</h4>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Asunto</th>
-                                <th>Resultado</th>
-                                <th>Confianza</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for record in recent_checks %}
-                            <tr>
-                                <td class="text-truncate" style="max-width: 300px;">{{ record.subject|truncatewords:5 }}</td>
-                                <td>
-                                    {% if record.prediction == 'spam' %}
-                                        <span class="badge badge-custom-spam">🚫 SPAM</span>
-                                    {% else %}
-                                        <span class="badge badge-custom-ham">✓ Legítimo</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ record.confidence|floatformat:1 }}%</td>
-                                <td>{{ record.created_at|date:"d/m/Y H:i" }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    <a href="{% url 'detector:history' %}" class="btn btn-sm btn-outline-primary">
-                        Ver todo el historial →
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
+        <!-- Historial reciente eliminado para una UI más compacta -->
     </div>
 </div>
 
@@ -123,6 +82,18 @@
     .form-control-custom:focus {
         border-color: #6f42c1;
         box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+    }
+    /* Reduce input and textarea sizes inside the analyzer card */
+    .card-custom .form-control,
+    .card-custom textarea,
+    .card-custom input {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.9rem;
+        border-radius: 6px;
+    }
+    /* Tighten card spacing */
+    .card-custom .card-body {
+        padding: 0.8rem 1rem;
     }
 </style>
 {% endblock %}
