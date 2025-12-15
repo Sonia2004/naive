@@ -1,0 +1,182 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                 🚀 DESPLEGAR EN RENDER - GUÍA PASO A PASO                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+TU APLICACIÓN ESTÁ LISTA PARA DESPLEGAR. SIGUE ESTOS PASOS:
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ PASO 1: CREAR CUENTA EN GITHUB                                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+1. Ve a → https://github.com/signup
+2. Completa el formulario (email, contraseña, username)
+3. Verifica tu email
+4. ✅ Listo
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ PASO 2: SUBIR TU CÓDIGO A GITHUB                                              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+1. Ve a GitHub y haz clic en "+" → "New repository"
+2. Nombre: spam-detector-django
+3. Haz clic en "Create repository"
+4. Ejecuta en tu terminal:
+
+   cd /home/sonia/Descargas/spam_detector_django
+   git remote set-url origin https://github.com/TU-USUARIO/spam-detector-django.git
+   git branch -M main
+   git push -u origin main
+
+✅ Tu código está en GitHub
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ PASO 3: CREAR CUENTA EN RENDER                                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+1. Ve a → https://render.com
+2. Haz clic en "Sign Up"
+3. Selecciona "Continue with GitHub"
+4. Autoriza Render
+5. ✅ Cuenta creada
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ PASO 4: DESPLEGAR LA APLICACIÓN EN RENDER                                     ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+1. En Render, haz clic en "New +" → "Web Service"
+2. Busca tu repositorio "spam-detector-django"
+3. Haz clic en "Connect"
+4. Completa:
+   - Name: spam-detector-django
+   - Environment: Python 3
+   - Branch: main
+   - Build Command: pip install -r requirements.txt
+   - Start Command: gunicorn spam_detector.wsgi --log-file -
+   - Instance Type: Free
+
+5. Haz clic en "Advanced"
+6. En "Environment Variables", agrega:
+   - DEBUG = False
+   - SECRET_KEY = (genera en https://djecrety.ir/)
+   - CSRF_TRUSTED_ORIGINS = https://spam-detector-django-xxxxx.onrender.com
+
+7. Haz clic en "Deploy Web Service"
+8. ⏳ ESPERA 5-10 MINUTOS
+
+✅ Cuando veas "Your service is live", ¡LISTO!
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ 🔌 TU API ESTÁ DISPONIBLE EN:                                                 ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+API Endpoint:
+→ https://tu-app-name.onrender.com/api/predict/
+
+Aplicación Web:
+→ https://tu-app-name.onrender.com/
+
+Historial:
+→ https://tu-app-name.onrender.com/history/
+
+Info Modelo:
+→ https://tu-app-name.onrender.com/model-info/
+
+Admin Panel:
+→ https://tu-app-name.onrender.com/admin/
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ 📝 CÓMO USAR LA API REST                                                       ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+EJEMPLO CON CURL (Email SPAM):
+
+curl -X POST https://tu-app-name.onrender.com/api/predict/ \
+  -H "Content-Type: application/json" \
+  -d '{"email_content": "Subject: ¡GANA DINERO AHORA!\n\nHaz clic para ganar $1000"}'
+
+RESPUESTA:
+
+{
+  "is_spam": true,
+  "label": "spam",
+  "spam_probability": 0.95,
+  "ham_probability": 0.05
+}
+
+---
+
+EJEMPLO CON CURL (Email Legítimo):
+
+curl -X POST https://tu-app-name.onrender.com/api/predict/ \
+  -H "Content-Type: application/json" \
+  -d '{"email_content": "Subject: Reunión mañana\n\nLa reunión será a las 10 AM"}'
+
+RESPUESTA:
+
+{
+  "is_spam": false,
+  "label": "ham",
+  "spam_probability": 0.02,
+  "ham_probability": 0.98
+}
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ 💻 USAR LA API CON PYTHON                                                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+import requests
+
+API_URL = "https://tu-app.onrender.com/api/predict/"
+
+email = "Subject: ¡GANA DINERO!\n\nClickea aquí"
+
+response = requests.post(
+    API_URL,
+    json={"email_content": email}
+)
+
+result = response.json()
+
+if result['is_spam']:
+    print(f"🚫 SPAM detectado ({result['spam_probability']:.1%})")
+else:
+    print(f"✅ Email legítimo ({result['ham_probability']:.1%})")
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ 💻 USAR LA API CON JAVASCRIPT                                                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+const apiUrl = "https://tu-app.onrender.com/api/predict/";
+
+const emailContent = "Subject: Test\n\nEmail content here";
+
+fetch(apiUrl, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({email_content: emailContent})
+})
+.then(r => r.json())
+.then(data => {
+    console.log(data.is_spam ? "🚫 SPAM" : "✅ Legítimo");
+    console.log(`Confianza: ${Math.max(data.spam_probability, data.ham_probability).toFixed(2)}`);
+});
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ ✅ CHECKLIST: CONFIRMA QUE TODO FUNCIONA                                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+[ ] Aplicación en Render con estado "live"
+[ ] Puedo acceder a https://tu-app.onrender.com
+[ ] Página principal carga sin errores
+[ ] API responde a POST /api/predict/
+[ ] Modelo está entrenado (sin error "Model not trained")
+[ ] Puedo analizar emails desde web
+[ ] Historial guarda análisis
+[ ] curl retorna JSON válido
+
+¡CUANDO TODO ESTÉ MARCADO, TU APP ESTÁ FUNCIONAL! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Versión: 1.0.0 | Creado: 14 de diciembre de 2025
+¡Disfruta tu detector de SPAM en producción! 🎉
