@@ -1,0 +1,213 @@
+{% extends 'detector/base.html' %}
+
+{% block title %}Información del Modelo - Detector de SPAM{% endblock %}
+
+{% block content %}
+<div class="header-custom">
+    <h1>🧠 Información del Modelo</h1>
+    <p>Detalles técnicos del modelo de Machine Learning</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <!-- Estado del Modelo -->
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-light border-0">
+                <h5 class="mb-0">Estado del Modelo</h5>
+            </div>
+            <div class="card-body">
+                {% if info.model_trained %}
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">✅</span>
+                        <div>
+                            <strong>Modelo Entrenado</strong>
+                            <p class="mb-0">El modelo está listo para realizar predicciones</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p><strong>Características en el vectorizador:</strong> {{ info.vectorizer_features }}</p>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">⚠️</span>
+                        <div>
+                            <strong>Modelo No Entrenado</strong>
+                            <p class="mb-0">El modelo necesita ser entrenado antes de hacer predicciones</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Descripción del Algoritmo -->
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-light border-0">
+                <h5 class="mb-0">📚 Algoritmo: Naive Bayes</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong>Naive Bayes</strong> es un algoritmo de clasificación probabilístico basado en el 
+                    teorema de Bayes con la suposición de independencia entre características (naive assumption).
+                </p>
+                <h6 class="mt-3">Características del algoritmo:</h6>
+                <ul>
+                    <li><strong>Rápido:</strong> Entrenamiento y predicción muy eficientes</li>
+                    <li><strong>Escalable:</strong> Funciona bien con conjuntos de datos grandes</li>
+                    <li><strong>Probabilístico:</strong> Proporciona probabilidades de predicción</li>
+                    <li><strong>Simple:</strong> Fácil de entender e interpretar</li>
+                    <li><strong>Robusto:</strong> Maneja bien el ruido en los datos</li>
+                </ul>
+
+                <h6 class="mt-3">Fórmula matemática:</h6>
+                <div class="bg-light p-3 rounded">
+                    <code>P(SPAM|características) = P(características|SPAM) × P(SPAM) / P(características)</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pipeline de Procesamiento -->
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-light border-0">
+                <h5 class="mb-0">⚙️ Pipeline de Procesamiento</h5>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="timeline-item mb-4">
+                        <div class="d-flex">
+                            <div style="min-width: 30px;">
+                                <div class="badge bg-primary" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">1</div>
+                            </div>
+                            <div class="ms-3">
+                                <h6>Lectura de Email</h6>
+                                <p class="text-muted mb-0">Carga el contenido del email (raw o estructurado)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item mb-4">
+                        <div class="d-flex">
+                            <div style="min-width: 30px;">
+                                <div class="badge bg-primary" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">2</div>
+                            </div>
+                            <div class="ms-3">
+                                <h6>Limpieza de HTML</h6>
+                                <p class="text-muted mb-0">Extrae el texto eliminando tags HTML</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item mb-4">
+                        <div class="d-flex">
+                            <div style="min-width: 30px;">
+                                <div class="badge bg-primary" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">3</div>
+                            </div>
+                            <div class="ms-3">
+                                <h6>Tokenización</h6>
+                                <p class="text-muted mb-0">Divide el texto en palabras (tokens)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item mb-4">
+                        <div class="d-flex">
+                            <div style="min-width: 30px;">
+                                <div class="badge bg-primary" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">4</div>
+                            </div>
+                            <div class="ms-3">
+                                <h6>Stemming</h6>
+                                <p class="text-muted mb-0">Reduce palabras a su raíz (ej: 'correos' → 'corr')</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item mb-4">
+                        <div class="d-flex">
+                            <div style="min-width: 30px;">
+                                <div class="badge bg-primary" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">5</div>
+                            </div>
+                            <div class="ms-3">
+                                <h6>Eliminación de Stopwords</h6>
+                                <p class="text-muted mb-0">Elimina palabras comunes sin valor (el, la, de, etc)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item mb-4">
+                        <div class="d-flex">
+                            <div style="min-width: 30px;">
+                                <div class="badge bg-primary" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">6</div>
+                            </div>
+                            <div class="ms-3">
+                                <h6>Vectorización (CountVectorizer)</h6>
+                                <p class="text-muted mb-0">Convierte el texto en números (matriz de conteos)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="d-flex">
+                            <div style="min-width: 30px;">
+                                <div class="badge bg-success" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">7</div>
+                            </div>
+                            <div class="ms-3">
+                                <h6>Clasificación</h6>
+                                <p class="text-muted mb-0">El modelo predice si es SPAM o legítimo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variantes de Naive Bayes -->
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-light border-0">
+                <h5 class="mb-0">🔄 Variantes de Naive Bayes</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>🔹 BernoulliNB (Utilizado)</h6>
+                        <p class="text-muted">
+                            Asume que las características son variables booleanas binarias. 
+                            Útil para datos discretos como la presencia/ausencia de palabras.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>🔹 GaussianNB</h6>
+                        <p class="text-muted">
+                            Asume que las características siguen una distribución gaussiana. 
+                            Útil para datos continuos.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>🔹 MultinomialNB</h6>
+                        <p class="text-muted">
+                            Asume distribución multinomial. 
+                            Útil para conteos de palabras en documentos.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>🔹 ComplementNB</h6>
+                        <p class="text-muted">
+                            Variante adaptada para datos desbalanceados. 
+                            Mejor desempeño con datasets de clasificación desequilibrados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de volver -->
+        <div class="mt-4">
+            <a href="{% url 'detector:index' %}" class="btn btn-custom btn-custom-primary">
+                ← Volver al Detector
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline-item {
+        padding-left: 0;
+    }
+    
+    .timeline-item .d-flex {
+        gap: 1rem;
+    }
+</style>
+{% endblock %}

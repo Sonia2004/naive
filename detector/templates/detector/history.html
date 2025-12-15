@@ -1,0 +1,144 @@
+{% extends 'detector/base.html' %}
+
+{% block title %}Historial - Detector de SPAM{% endblock %}
+
+{% block content %}
+<div class="header-custom">
+    <h1>📊 Historial de Análisis</h1>
+    <p>Registro de todos los emails analizados</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <!-- Estadísticas -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.total }}</div>
+                    <div class="stat-label">Total Analizados</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number text-danger">{{ stats.spam }}</div>
+                    <div class="stat-label">SPAM Detectados</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number text-success">{{ stats.ham }}</div>
+                    <div class="stat-label">Emails Legítimos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de distribución -->
+        {% if stats.total > 0 %}
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-light border-0">
+                <h5 class="mb-0">Distribución de Resultados</h5>
+            </div>
+            <div class="card-body">
+                <div class="progress" style="height: 40px;">
+                    <div class="progress-bar bg-danger" 
+                         style="width: {{ stats.spam_percentage }}%"
+                         role="progressbar">
+                        SPAM: {{ stats.spam_percentage|floatformat:1 }}%
+                    </div>
+                    <div class="progress-bar bg-success" 
+                         style="width: {{ remaining_percentage }}%"
+                         role="progressbar">
+                        Legítimo: {{ remaining_percentage|floatformat:1 }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Tabla de registros -->
+        <div class="card card-custom">
+            <div class="card-header bg-light border-0">
+                <h5 class="mb-0">Registros Detallados</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if records %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Asunto</th>
+                                <th>Resultado</th>
+                                <th>Confianza</th>
+                                <th>Fecha y Hora</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                            <tr>
+                                <td class="text-truncate" style="max-width: 400px;">
+                                    <strong>{{ record.subject|truncatewords:8 }}</strong>
+                                </td>
+                                <td>
+                                    {% if record.prediction == 'spam' %}
+                                        <span class="badge badge-custom-spam">🚫 SPAM</span>
+                                    {% else %}
+                                        <span class="badge badge-custom-ham">✓ Legítimo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress" style="width: 100px; height: 20px;">
+                                            <div class="progress-bar {% if record.prediction == 'spam' %}bg-danger{% else %}bg-success{% endif %}" 
+                                                 style="width: {{ record.confidence|floatformat:0 }}%">
+                                            </div>
+                                        </div>
+                                        <span class="ms-2">{{ record.confidence|floatformat:1 }}%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ record.created_at|date:"d/m/Y H:i:s" }}</small>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-secondary" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#content-{{ record.id }}"
+                                            title="Ver contenido">
+                                        👁️ Ver
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="collapse" id="content-{{ record.id }}">
+                                <td colspan="5">
+                                    <div class="p-3 bg-light">
+                                        <strong>Contenido:</strong>
+                                        <p class="mb-0" style="font-size: 0.9rem; word-break: break-word;">
+                                            {{ record.email_content }}
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="p-4 text-center text-muted">
+                    <p>No hay registros disponibles. ¡Comienza a analizar emails!</p>
+                    <a href="{% url 'detector:index' %}" class="btn btn-custom btn-custom-primary">
+                        Ir al Detector
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Botón para volver -->
+        <div class="mt-4">
+            <a href="{% url 'detector:index' %}" class="btn btn-custom btn-custom-primary">
+                ← Volver al Detector
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

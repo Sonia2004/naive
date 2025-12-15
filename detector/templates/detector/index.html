@@ -1,0 +1,128 @@
+{% extends 'detector/base.html' %}
+
+{% block title %}Detector de SPAM{% endblock %}
+
+{% block content %}
+<div class="header-custom">
+    <h1>🛡️ Detector de SPAM</h1>
+    <p>Utiliza Machine Learning para detectar emails de SPAM</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Formulario -->
+        <div class="card card-custom">
+            <div class="card-header bg-light border-0">
+                <h4 class="mb-0">Analizar Email</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" class="needs-validation">
+                    {% csrf_token %}
+                    
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-4" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="simple-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#simple" type="button" role="tab">
+                                Modo Simple
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="raw-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#raw" type="button" role="tab">
+                                Modo Raw
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <!-- Tab content -->
+                    <div class="tab-content">
+                        <!-- Simple Mode -->
+                        <div class="tab-pane fade show active" id="simple" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label">Asunto del Email</label>
+                                {{ form.subject }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contenido del Email</label>
+                                {{ form.body }}
+                            </div>
+                        </div>
+                        
+                        <!-- Raw Mode -->
+                        <div class="tab-pane fade" id="raw" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label">Email en Formato Raw</label>
+                                {{ form.raw_email }}
+                                <small class="form-text text-muted">
+                                    Pegue el email completo incluyendo headers (From, To, Subject, etc.)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-custom btn-custom-primary w-100 mt-3">
+                        <i class="fas fa-search"></i> Analizar Email
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Historial reciente -->
+        {% if recent_checks %}
+        <div class="card card-custom">
+            <div class="card-header bg-light border-0">
+                <h4 class="mb-0">Últimos Análisis</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Asunto</th>
+                                <th>Resultado</th>
+                                <th>Confianza</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in recent_checks %}
+                            <tr>
+                                <td class="text-truncate" style="max-width: 300px;">{{ record.subject|truncatewords:5 }}</td>
+                                <td>
+                                    {% if record.prediction == 'spam' %}
+                                        <span class="badge badge-custom-spam">🚫 SPAM</span>
+                                    {% else %}
+                                        <span class="badge badge-custom-ham">✓ Legítimo</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ record.confidence|floatformat:1 }}%</td>
+                                <td>{{ record.created_at|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'detector:history' %}" class="btn btn-sm btn-outline-primary">
+                        Ver todo el historial →
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .form-control-custom {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .form-control-custom:focus {
+        border-color: #6f42c1;
+        box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+    }
+</style>
+{% endblock %}

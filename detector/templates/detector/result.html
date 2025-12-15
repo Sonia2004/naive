@@ -1,0 +1,109 @@
+{% extends 'detector/base.html' %}
+
+{% block title %}Resultado - Detector de SPAM{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card card-custom">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    {% if result.is_spam %}
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+                        <h2 class="text-danger fw-bold">¡Posible SPAM!</h2>
+                        <p class="text-muted">Este email podría ser SPAM</p>
+                    {% else %}
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+                        <h2 class="text-success fw-bold">Email Legítimo</h2>
+                        <p class="text-muted">Este email parece ser legítimo</p>
+                    {% endif %}
+                </div>
+
+                <hr>
+
+                <!-- Resultados -->
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-number text-danger">
+                                {{ result.spam_probability|floatformat:1 }}%
+                            </div>
+                            <div class="stat-label">Probabilidad SPAM</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-number text-success">
+                                {{ result.ham_probability|floatformat:1 }}%
+                            </div>
+                            <div class="stat-label">Probabilidad Legítimo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del email -->
+                <div class="mt-5">
+                    <h5>Información del Email</h5>
+                    {% if subject %}
+                    <div class="alert alert-light border-start border-4" style="border-left-color: #6f42c1;">
+                        <strong>Asunto:</strong><br>
+                        {{ subject }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Gráfico de probabilidad -->
+                <div class="mt-5">
+                    <h5>Análisis de Probabilidad</h5>
+                    <div class="progress mb-3" style="height: 30px;">
+                        <div class="progress-bar bg-success" 
+                             role="progressbar" 
+                             style="width: {{ result.ham_probability|floatformat:0 }}%"
+                             aria-valuenow="{{ result.ham_probability }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            Legítimo: {{ result.ham_probability|floatformat:1 }}%
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 30px;">
+                        <div class="progress-bar bg-danger" 
+                             role="progressbar" 
+                             style="width: {{ result.spam_probability|floatformat:0 }}%"
+                             aria-valuenow="{{ result.spam_probability }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            SPAM: {{ result.spam_probability|floatformat:1 }}%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="mt-5 d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'detector:index' %}" class="btn btn-custom btn-custom-primary">
+                        ← Analizar otro email
+                    </a>
+                    <a href="{% url 'detector:history' %}" class="btn btn-outline-primary btn-custom">
+                        Ver historial →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="card card-custom mt-4">
+            <div class="card-body">
+                <h5 class="card-title">ℹ️ Información del Análisis</h5>
+                <p class="text-muted">
+                    Este análisis se realiza utilizando un modelo de Machine Learning basado en el algoritmo 
+                    <strong>Naive Bayes</strong>, que clasifica emails como SPAM o legítimos basándose en 
+                    características de texto extraídas del contenido del email.
+                </p>
+                <p class="text-muted mb-0">
+                    <strong>Nota:</strong> Las predicciones son probabilísticas y pueden no ser 100% precisas. 
+                    Siempre revise manualmente los emails sospechosos.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
