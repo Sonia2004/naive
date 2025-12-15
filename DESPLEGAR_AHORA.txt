@@ -1,0 +1,163 @@
+🚀 DESPLEGAR EN RENDER - INSTRUCCIONES FINALES
+
+Tu código está en GitHub:
+→ https://github.com/Sonia2004/naive
+
+═══════════════════════════════════════════════════════════════════════════════
+
+SIGUE ESTOS PASOS PARA DESPLEGAR EN RENDER:
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASO 1: VE A RENDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Abre → https://render.com
+2. Haz clic en "Sign Up"
+3. Selecciona "Continue with GitHub"
+4. Autoriza Render para acceder a tus repos
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASO 2: CREAR WEB SERVICE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. En Render Dashboard, haz clic en "New +"
+2. Selecciona "Web Service"
+3. Busca y conecta tu repositorio "naive"
+4. (Si no aparece, haz clic en "Configure account")
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASO 3: CONFIGURAR DESPLIEGUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Completa con EXACTAMENTE esto:
+
+NAME:                  naive
+ENVIRONMENT:           Python 3
+REGION:                (dejar por defecto)
+BRANCH:                main
+BUILD COMMAND:         pip install -r requirements.txt
+START COMMAND:         gunicorn spam_detector.wsgi --log-file -
+INSTANCE TYPE:         Free
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASO 4: VARIABLES DE ENTORNO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Haz clic en "Advanced" ↓
+2. Haz clic en "Add Environment Variable"
+3. Agrega CADA variable por separado:
+
+DEBUG
+False
+
+SECRET_KEY
+(Copia de aquí: https://djecrety.ir/)
+Ejemplo: aA1bB2cC3dD4eE5fF6gG7hH8iI9jJ0kK1lL2mM3nN4oO5pP6qQ7rR8sS9tT0uU
+
+CSRF_TRUSTED_ORIGINS
+https://naive.onrender.com
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASO 5: DESPLEGAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Haz clic en "Deploy Web Service"
+2. ⏳ ESPERA 5-10 MINUTOS
+3. Verás los logs de instalación
+4. Cuando diga "Your service is live" → ¡LISTO!
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ TU APLICACIÓN ESTARÁ EN:
+
+🌐 Web:
+   https://naive.onrender.com/
+
+🔌 API REST:
+   https://naive.onrender.com/api/predict/
+
+📊 Historial:
+   https://naive.onrender.com/history/
+
+💡 Info Modelo:
+   https://naive.onrender.com/model-info/
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔌 CÓMO USAR LA API
+
+Una vez desplegada, prueba con:
+
+curl -X POST https://naive.onrender.com/api/predict/ \
+  -H "Content-Type: application/json" \
+  -d '{"email_content": "Subject: ¡GANA DINERO!\n\nHaz clic aquí"}'
+
+Respuesta:
+{
+  "is_spam": true,
+  "label": "spam",
+  "spam_probability": 0.95,
+  "ham_probability": 0.05
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+💻 EJEMPLOS DE USO
+
+PYTHON:
+   import requests
+   r = requests.post("https://naive.onrender.com/api/predict/",
+                     json={"email_content": "..."})
+   print(r.json())
+
+JAVASCRIPT:
+   fetch("https://naive.onrender.com/api/predict/", {
+     method: "POST",
+     body: JSON.stringify({email_content: "..."})
+   }).then(r => r.json()).then(console.log)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❓ PROBLEMAS COMUNES
+
+P: "502 Bad Gateway"
+R: Espera 2-3 minutos, la app se está iniciando
+
+P: "Model not trained"
+R: Se entrena automáticamente, espera a que termine el despliegue
+
+P: "CSRF verification failed"
+R: Verifica CSRF_TRUSTED_ORIGINS esté exacto
+
+P: "Module not found"
+R: Revisa que requirements.txt tenga todas las dependencias
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ CHECKLIST FINAL
+
+[ ] Cuenta en Render creada
+[ ] Web Service creado
+[ ] Configuración completada
+[ ] Variables de entorno agregadas
+[ ] Build Command correcto
+[ ] Start Command correcto
+[ ] Despliegue iniciado
+[ ] Espera a "Your service is live"
+[ ] Accede a https://naive.onrender.com
+[ ] Prueba la API
+
+═══════════════════════════════════════════════════════════════════════════════
+
+¡LISTO! Tu aplicación estará en vivo en 10 minutos 🚀
+
+Repositorio: https://github.com/Sonia2004/naive
+App: https://naive.onrender.com/
+API: https://naive.onrender.com/api/predict/
+
+═══════════════════════════════════════════════════════════════════════════════
