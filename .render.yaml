@@ -1,0 +1,19 @@
+# Render service configuration to ensure reproducible builds
+services:
+  - type: web
+    name: naive-spam-detector
+    env: python
+    instanceType: free
+    region: oregon
+    plan: free
+    buildCommand: "python -m pip install --upgrade pip setuptools wheel && pip install --prefer-binary -r requirements.txt"
+    startCommand: "gunicorn spam_detector.wsgi --log-file -"
+    releaseCommand: "python manage.py migrate && python train_model.py"
+    healthCheckPath: "/"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        fromService: null
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://naive.onrender.com"
