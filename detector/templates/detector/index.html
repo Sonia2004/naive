@@ -7,14 +7,20 @@
     <title>Detector</title>
     <style>
       html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif}
-      body{background:linear-gradient(135deg,#6f6ad8,#7a5fc2);color:#222}
+      /* soothing blue background gradient */
+      body{background:linear-gradient(135deg,#5b8def 0%,#3b6ee6 50%,#2a5ad1 100%);color:#222}
       .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
-      .box{width:640px;max-width:92%;background:#fff;border-radius:8px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
-      .input, textarea{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:6px;padding:10px;font-size:1rem}
+      /* white box with rounded corners and subtle blue shadow */
+      .box{width:640px;max-width:92%;background:#ffffff;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(41,82,160,0.15)}
+      /* inputs and textarea: rounded, subtle border and blue focus */
+      .input, textarea{width:100%;box-sizing:border-box;border:1px solid #e6eefc;border-radius:10px;padding:12px;font-size:1rem;background:#fbfdff}
       textarea{height:260px;resize:vertical}
-      .submit-row{display:flex;justify-content:flex-end;margin-top:10px}
-      .btn{background:#f8f8f8;border:1px solid #333;padding:8px 12px;border-radius:4px;cursor:pointer}
-      label{display:block;font-size:0.95rem;margin-bottom:6px;color:#333}
+      .input:focus, textarea:focus{outline:none;border-color:#3b6ee6;box-shadow:0 6px 20px rgba(59,110,230,0.12)}
+      .submit-row{display:flex;justify-content:flex-end;margin-top:12px}
+      /* nicer blue button with subtle shadow and hover */
+      .btn{background:linear-gradient(90deg,#3b6ee6,#2a5ad1);color:#fff;border:none;padding:9px 14px;border-radius:10px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(41,82,160,0.16);transition:transform .12s ease,box-shadow .12s ease}
+      .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(41,82,160,0.22)}
+      label{display:block;font-size:0.95rem;margin-bottom:6px;color:#21314a}
     </style>
   </head>
   <body>
