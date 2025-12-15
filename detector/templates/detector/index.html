@@ -1,28 +1,16 @@
 {% extends 'detector/base.html' %}
 
-{% block title %}Detector de SPAM{% endblock %}
+{% block title %}Detector{% endblock %}
 
 {% block content %}
-<div style="max-width:540px;margin:24px auto;padding:12px;">
-  <h2 style="font-size:1.25rem;margin-bottom:8px;">Detector de SPAM</h2>
-  <p style="margin-bottom:12px;font-size:0.95rem;color:#333;">Pega el texto del email y pulsa analizar.</p>
-
+<div style="max-width:520px;margin:18px auto;padding:6px;">
   <form method="post">
     {% csrf_token %}
-    <div style="margin-bottom:8px;">
-      <label style="display:block;font-weight:600;font-size:0.9rem;margin-bottom:4px;">Asunto</label>
-      {{ form.subject }}
-    </div>
-
-    <div style="margin-bottom:8px;">
-      <label style="display:block;font-weight:600;font-size:0.9rem;margin-bottom:4px;">Contenido</label>
-      {{ form.body }}
-    </div>
-
-    <div style="text-align:right;">
+    {{ form.subject }}
+    {{ form.body }}
+    <div style="text-align:right;margin-top:6px;">
       <button type="submit" style="padding:6px 10px;font-size:0.9rem;">Analizar</button>
     </div>
   </form>
 </div>
-
 {% endblock %}
